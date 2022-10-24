@@ -14,7 +14,16 @@ function WayPoints() {
         getData()
     }, [])
 
-    
+    const renderSpeedingDuration = (wayPoints) => {
+        let duration = 0;
+
+        for (let i = 0; i < wayPoints.length - 1; i++) {
+            if (wayPoints[i].speed > wayPoints[i].speed_limit)
+                duration += calculateTimeDifference(wayPoints[i], wayPoints[i + 1])
+        }
+
+        return (<>{duration} {timeUnits.Unit}</>)
+    }
     const renderTotalDuration = (wayPoints) => {
         const durationTime = calculateTimeDifference(wayPoints[0], wayPoints[wayPoints.length - 1])
         return (<>{durationTime} {timeUnits.Unit}</>)
@@ -83,7 +92,7 @@ function WayPoints() {
             </div>
             <div>
                 <h2>Duration  Speeding</h2>
-                <p>Total Duration :</p>
+                <p>Total Duration : {renderSpeedingDuration(wayPoints)}</p>
             </div>
             <div>
                 <h2>Total Distance</h2>
