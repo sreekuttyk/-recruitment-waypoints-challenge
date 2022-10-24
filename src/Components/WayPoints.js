@@ -23,6 +23,22 @@ function WayPoints() {
     function calculateTimeDifference(wayPointStart, wayPointEnd) {
         return (Date.parse(wayPointEnd.timestamp) - Date.parse(wayPointStart.timestamp)) / timeUnits.Value;
     }
+    const renderSpeedingDistance = (wayPoints) => {
+        let distance = 0;
+
+        for (let i = 0; i < wayPoints.length - 1; i++) {
+            if (wayPoints[i].speed > wayPoints[i].speed_limit) {
+                const lat1 = wayPoints[i].position.latitude;
+                const lon1 = wayPoints[i].position.longitude;
+                const lat2 = wayPoints[i + 1].position.latitude;
+                const lon2 = wayPoints[i + 1].position.longitude;
+
+                distance += calculateDistance(lat1, lon1, lat2, lon2);
+            }
+        }
+        return (<>{distance} {distanceUnits.Unit}</>)
+    }
+
     const renderTotalDistance = (wayPoints) => {
         let distance = 0;
 
@@ -63,7 +79,7 @@ function WayPoints() {
         <div>
             <div>
                 <h2>Distance Speeding</h2>
-                <p>Total Distance : </p>
+                <p>Total Distance : {renderSpeedingDistance(wayPoints)} </p>
             </div>
             <div>
                 <h2>Duration  Speeding</h2>
