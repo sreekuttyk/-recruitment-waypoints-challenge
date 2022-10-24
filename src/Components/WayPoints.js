@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { distanceUnits} from "../Constants/constants";
-
+import { distanceUnits,timeUnits} from "../Constants/constants";
 
 function WayPoints() {
     const [wayPoints, setWayPoints] = useState([]);
@@ -16,7 +15,14 @@ function WayPoints() {
     }, [])
 
     
+    const renderTotalDuration = (wayPoints) => {
+        const durationTime = calculateTimeDifference(wayPoints[0], wayPoints[wayPoints.length - 1])
+        return (<>{durationTime} {timeUnits.Unit}</>)
+    }
 
+    function calculateTimeDifference(wayPointStart, wayPointEnd) {
+        return (Date.parse(wayPointEnd.timestamp) - Date.parse(wayPointStart.timestamp)) / timeUnits.Value;
+    }
     const renderTotalDistance = (wayPoints) => {
         let distance = 0;
 
@@ -28,7 +34,7 @@ function WayPoints() {
             distance += calculateDistance(lat1, lon1, lat2, lon2);
         }
 
-        return (<>{(Math.round(distance, 2))} {distanceUnits.Unit}</>)
+        return (<>{distance} {distanceUnits.Unit}</>)
     }
 
     function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -69,7 +75,7 @@ function WayPoints() {
             </div>
             <div>
                 <h2>Total Duration</h2>
-                <p>Total Duration : </p>
+                <p>Total Duration : {renderTotalDuration(wayPoints)} </p>
             </div>
         </div>
     )
